@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The5ers High Stakes - Position Sizing Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #00d4ff;
+        }
+        
+        .account-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .info-card {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+        
+        .info-card label {
+            display: block;
+            font-size: 0.9em;
+            color: #00d4ff;
+            margin-bottom: 5px;
+        }
+        
+        .info-card .value {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .info-card input {
+            width: 100%;
+            padding: 8px;
+            font-size: 1.3em;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 212, 255, 0.5);
+            border-radius: 5px;
+            color: #fff;
+        }
+        
+        .warning {
+            background: rgba(255, 68, 68, 0.2);
+            border: 1px solid rgba(255, 68, 68, 0.5);
+        }
+        
+        .warning .value {
+            color: #ff4444;
+        }
+        
+        .calculators {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .calculator {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .calculator h2 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #aaa;
+            font-size: 0.9em;
+        }
+        
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1em;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+        }
+        
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #00d4ff;
+        }
+        
+        .results {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 2px solid #00d4ff;
+        }
+        
+        .results h3 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .result-row:last-child {
+            border-bottom: none;
+        }
+        
+        .result-label {
+            color: #aaa;
+        }
+        
+        .result-value {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #00ff88;
+        }
+        
+        .quick-reference {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .quick-reference h4 {
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+        
+        .quick-reference table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .quick-reference th,
+        .quick-reference td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .quick-reference th {
+            color: #00d4ff;
+            font-weight: 600;
+        }
+        
+        .quick-reference td {
+            color: #ccc;
+        }
+        
+        .recommended {
+            background: rgba(0, 255, 136, 0.1);
+        }
+        
+        .risk-warning {
+            background: rgba(255, 68, 68, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #ff4444;
+        }
+        
+        .risk-warning strong {
+            color: #ff4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 The5ers High Stakes Position Sizing Calculator</h1>
+            <div class="account-info">
+                <div class="info-card">
+                    <label>Current Balance</label>
+                    <input type="number" id="accountBalance" value="2500" step="0.01">
+                </div>
+                <div class="info-card">
+                    <label>Risk Per Trade (%)</label>
+                    <input type="number" id="riskPercent" value="0.5" step="0.1" max="2.5">
+                </div>
+                <div class="info-card">
+                    <label>Risk Amount ($)</label>
+                    <div class="value" id="riskAmount">$12.50</div>
+                </div>
+                <div class="info-card warning">
+                    <label>Max Daily Loss (2.5%)</label>
+                    <div class="value" id="maxDailyLoss">$62.50</div>
+                </div>
+                <div class="info-card warning">
+                    <label>Max Overall DD (10%)</label>
+                    <div class="value" id="maxOverallDD">$250.00</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="calculators">
+            <!-- EUR/USD Calculator -->
+            <div class="calculator">
+                <h2>💱 EUR/USD Position Sizer</h2>
+                
+                <div class="input-group">
+                    <label>Stop Loss (pips)</label>
+                    <input type="number" id="eurusd_sl" value="12.5" step="0.1" min="1">
+                </div>
+                
+                <div class="input-group">
+                    <label>Pip Value per Lot</label>
+                    <select id="eurusd_pipvalue">
+                        <option value="10">Standard Lot ($10/pip)</option>
+                        <option value="1" selected>Mini Lot ($1/pip)</option>
+                        <option value="0.1">Micro Lot ($0.10/pip)</option>
+                    </select>
+                </div>
+                
+                <div class="results">
+                    <h3>📊 Calculated Position</h3>
+                    <div class="result-row">
+                        <span class="result-label">Recommended Lot Size:</span>
+                        <span class="result-value" id="eurusd_lotsize">0.00</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Actual Risk:</span>
+                        <span class="result-value" id="eurusd_risk">$0.00</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Risk %:</span>
+                        <span class="result-value" id="eurusd_risk_percent">0.00%</span>
+                    </div>
+                </div>
+                
+                <div class="quick-reference">
+                    <h4>Quick Reference (0.5% Risk)</h4>
+                    <table>
+                        <tr>
+                            <th>Lot Size</th>
+                            <th>SL (pips)</th>
+                            <th>Risk $</th>
+                            <th>Risk %</th>
+                        </tr>
+                        <tr class="recommended">
+                            <td>0.10</td>
+                            <td>12.5</td>
+                            <td>$12.50</td>
+                            <td>0.50%</td>
+                        </tr>
+                        <tr>
+                            <td>0.10</td>
+                            <td>10</td>
+                            <td>$10.00</td>
+                            <td>0.40%</td>
+                        </tr>
+                        <tr>
+                            <td>0.10</td>
+                            <td>15</td>
+                            <td>$15.00</td>
+                            <td>0.60%</td>
+                        </tr>
+                        <tr>
+                            <td>0.20</td>
+                            <td>6</td>
+                            <td>$12.00</td>
+                            <td>0.48%</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="risk-warning">
+                    <strong>⚠️ EUR/USD Notes:</strong> Typical spread: 0.5-1 pip. Minimum recommended SL: 10 pips.
+                </div>
+            </div>
+
+            <!-- XAUUSD Calculator -->
+            <div class="calculator">
+                <h2>🥇 XAUUSD (Gold) Position Sizer</h2>
+                
+                <div class="input-group">
+                    <label>Stop Loss (points / $)</label>
+                    <input type="number" id="xauusd_sl" value="12.5" step="0.1" min="1">
+                </div>
+                
+                <div class="input-group">
+                    <label>Contract Size</label>
+                    <select id="xauusd_contract">
+                        <option value="100" selected>1 Lot = 100 oz ($1 per $1 move)</option>
+                        <option value="10">0.1 Lot = 10 oz ($0.10 per $1 move)</option>
+                        <option value="1">0.01 Lot = 1 oz ($0.01 per $1 move)</option>
+                    </select>
+                </div>
+                
+                <div class="results">
+                    <h3>📊 Calculated Position</h3>
+                    <div class="result-row">
+                        <span class="result-label">Recommended Lot Size:</span>
+                        <span class="result-value" id="xauusd_lotsize">0.00</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Actual Risk:</span>
+                        <span class="result-value" id="xauusd_risk">$0.00</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Risk %:</span>
+                        <span class="result-value" id="xauusd_risk_percent">0.00%</span>
+                    </div>
+                </div>
+                
+                <div class="quick-reference">
+                    <h4>Quick Reference (0.5% Risk)</h4>
+                    <table>
+                        <tr>
+                            <th>Lot Size</th>
+                            <th>SL (pts/$)</th>
+                            <th>Risk $</th>
+                            <th>Risk %</th>
+                        </tr>
+                        <tr class="recommended">
+                            <td>0.01</td>
+                            <td>12.5</td>
+                            <td>$12.50</td>
+                            <td>0.50%</td>
+                        </tr>
+                        <tr>
+                            <td>0.01</td>
+                            <td>10</td>
+                            <td>$10.00</td>
+                            <td>0.40%</td>
+                        </tr>
+                        <tr>
+                            <td>0.01</td>
+                            <td>15</td>
+                            <td>$15.00</td>
+                            <td>0.60%</td>
+                        </tr>
+                        <tr>
+                            <td>0.02</td>
+                            <td>6</td>
+                            <td>$12.00</td>
+                            <td>0.48%</td>
+                        </tr>
+                        <tr>
+                            <td>0.03</td>
+                            <td>4</td>
+                            <td>$12.00</td>
+                            <td>0.48%</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="risk-warning">
+                    <strong>⚠️ XAUUSD Notes:</strong> Typical spread: $0.20-0.50. Minimum recommended SL: 10-15 points. High volatility asset!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Update account info displays
+        function updateAccountInfo() {
+            const balance = parseFloat(document.getElementById('accountBalance').value) || 2500;
+            const riskPercent = parseFloat(document.getElementById('riskPercent').value) || 0.5;
+            
+            const riskAmount = balance * (riskPercent / 100);
+            const maxDailyLoss = balance * 0.025;
+            const maxOverallDD = balance * 0.10;
+            
+            document.getElementById('riskAmount').textContent = `$${riskAmount.toFixed(2)}`;
+            document.getElementById('maxDailyLoss').textContent = `$${maxDailyLoss.toFixed(2)}`;
+            document.getElementById('maxOverallDD').textContent = `$${maxOverallDD.toFixed(2)}`;
+            
+            calculateEURUSD();
+            calculateXAUUSD();
+        }
+        
+        // Calculate EUR/USD position
+        function calculateEURUSD() {
+            const balance = parseFloat(document.getElementById('accountBalance').value) || 2500;
+            const riskPercent = parseFloat(document.getElementById('riskPercent').value) || 0.5;
+            const riskAmount = balance * (riskPercent / 100);
+            
+            const sl = parseFloat(document.getElementById('eurusd_sl').value) || 12.5;
+            const pipValue = parseFloat(document.getElementById('eurusd_pipvalue').value) || 1;
+            
+            // Calculate lot size: Risk Amount / (SL in pips × Pip Value)
+            const lotSize = riskAmount / (sl * pipValue);
+            const roundedLotSize = Math.round(lotSize * 100) / 100; // Round to 2 decimals
+            
+            const actualRisk = roundedLotSize * sl * pipValue;
+            const actualRiskPercent = (actualRisk / balance) * 100;
+            
+            document.getElementById('eurusd_lotsize').textContent = roundedLotSize.toFixed(2);
+            document.getElementById('eurusd_risk').textContent = `$${actualRisk.toFixed(2)}`;
+            document.getElementById('eurusd_risk_percent').textContent = `${actualRiskPercent.toFixed(2)}%`;
+            
+            // Color code based on risk
+            const riskElement = document.getElementById('eurusd_risk');
+            if (actualRiskPercent > 0.6) {
+                riskElement.style.color = '#ff4444';
+            } else if (actualRiskPercent < 0.4) {
+                riskElement.style.color = '#ffaa00';
+            } else {
+                riskElement.style.color = '#00ff88';
+            }
+        }
+        
+        // Calculate XAUUSD position
+        function calculateXAUUSD() {
+            const balance = parseFloat(document.getElementById('accountBalance').value) || 2500;
+            const riskPercent = parseFloat(document.getElementById('riskPercent').value) || 0.5;
+            const riskAmount = balance * (riskPercent / 100);
+            
+            const sl = parseFloat(document.getElementById('xauusd_sl').value) || 12.5;
+            const contractSize = parseFloat(document.getElementById('xauusd_contract').value) || 100;
+            
+            // Calculate lot size: Risk Amount / (SL × Contract Size)
+            // For XAUUSD: 1 lot = 100oz, price move of $1 = $100 risk per lot
+            const lotSize = riskAmount / (sl * contractSize);
+            const roundedLotSize = Math.round(lotSize * 100) / 100; // Round to 2 decimals
+            
+            const actualRisk = roundedLotSize * sl * contractSize;
+            const actualRiskPercent = (actualRisk / balance) * 100;
+            
+            document.getElementById('xauusd_lotsize').textContent = roundedLotSize.toFixed(2);
+            document.getElementById('xauusd_risk').textContent = `$${actualRisk.toFixed(2)}`;
+            document.getElementById('xauusd_risk_percent').textContent = `${actualRiskPercent.toFixed(2)}`;
+            
+            // Color code based on risk
+            const riskElement = document.getElementById('xauusd_risk');
+            if (actualRiskPercent > 0.6) {
+                riskElement.style.color = '#ff4444';
+            } else if (actualRiskPercent < 0.4) {
+                riskElement.style.color = '#ffaa00';
+            } else {
+                riskElement.style.color = '#00ff88';
+            }
+        }
+        
+        // Event listeners
+        document.getElementById('accountBalance').addEventListener('input', updateAccountInfo);
+        document.getElementById('riskPercent').addEventListener('input', updateAccountInfo);
+        document.getElementById('eurusd_sl').addEventListener('input', calculateEURUSD);
+        document.getElementById('eurusd_pipvalue').addEventListener('change', calculateEURUSD);
+        document.getElementById('xauusd_sl').addEventListener('input', calculateXAUUSD);
+        document.getElementById('xauusd_contract').addEventListener('change', calculateXAUUSD);
+        
+        // Initialize
+        updateAccountInfo();
+    </script>
+</body>
+</html>
